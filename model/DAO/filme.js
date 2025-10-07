@@ -5,11 +5,20 @@
  * Versão: 1.0
  **************************/
 
-/**
+/*
  * Exemplos de Dependencias/Bibliotecas, para conexão com o Banco de Dados
  *  Banco de Dados Relacionais ---
  *  Sequelize -> Foi utilizado em muitos projetos desde o início do Node.JS <Vuneravel!>
  *  Prisma -> É uma dependência atual que trabalha com Banco de Dados (MySQL, PostgreSQL, SQLServer) (SQL ou ORM)
+ *      npm install prisma --save         -> instalar o prisma (Conexão com o Database)
+ *      npm install @prisma/client --save -> instlar o cliente do prisma (executar scripts SQL no BD)
+ *      npx prisma init                   -> prompt de comando para inicializar o prisma
+ * 
+ *      npx prisma migrate dev            -> Realiza o sincronismo entre o prisma e o BD (CUIDADO!, neste processo
+ *                                           você poderá perder dados reais do BD, pois ele pega e cria tabelas programadas do ORM schema.prisma)
+ * 
+ *      npx prisma generate               -> Apenas realiza o sincronismo entre o prisma e o BD, geralmente usamos para rodar o projeto em um PC novo
+ * 
  *  Knex -> É uma dependência que trabalha com MySQL
  * 
  * Banco de Dados Não Relacionais ---
