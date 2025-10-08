@@ -15,8 +15,8 @@ const DEFAULT_MESSAGES = require('../modulo/config_message.js')
 //Retorna uma lista de todos os filmes
 const listarFilmes = async function () {
 
-    try { 
-        
+    try {
+
         // Criando um objeto novo para as mensagens
         let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
@@ -29,8 +29,8 @@ const listarFilmes = async function () {
 
                 // Se ele cair nesta condicional 
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status,
-                MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code,
-                MESSAGES.DEFAULT_HEADER.items.filmes = resultFilmes;
+                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code,
+                    MESSAGES.DEFAULT_HEADER.items.filmes = resultFilmes;
 
                 return MESSAGES.DEFAULT_HEADER //200
             } else {
@@ -43,32 +43,37 @@ const listarFilmes = async function () {
     } catch (error) {
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
-}; 
+};
 
 
 //Retorna um filme filtrando pelo id
 const buscarFilmesId = async function (id) {
 
     try {
-        
+
         //Criando um objeto novo para as mensagens
         let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
 
         //se for ao contrario do falso, entra e continua o fluxo
         //Validação da chegada do ID
-        if(!isNaN(id)) {
+        if (!isNaN(id)) {
             let resultFilmes = await filmeDAO.getSelectByIdMovies(Number(id));
-            
-            if(resultFilmes){
-                if(resultFilmes.length > 0){
+
+            if (resultFilmes) {
+                if (resultFilmes.length > 0) {
+                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status,
+                        MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code,
+                        MESSAGES.DEFAULT_HEADER.items.filmes = resultFilmes;
+
+                        return MESSAGES.DEFAULT_HEADER //200
                 } else {
                     return MESSAGES.ERROR_NOT_FOUND //404
                 }
             } else {
                 return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
             }
-            
+
         } else {
             return MESSAGES.ERROR_REQUIRED_FIELDS //400
         }
@@ -76,8 +81,6 @@ const buscarFilmesId = async function (id) {
     } catch (error) {
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
-
-
 }
 
 //Insere um filme
@@ -97,7 +100,7 @@ const excluirFilme = async function (id) {
 
 module.exports = {
     listarFilmes,
-    // buscarFilmesId,
+    buscarFilmesId
     // inserirFilme,
     // atualizarFilme,
     // excluirFilme

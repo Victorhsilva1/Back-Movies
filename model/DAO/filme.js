@@ -109,7 +109,7 @@ const setDeleteMovies = async function (id) {
 
 module.exports = {
     getSelectAllMovies,
-    // getSelectByIdMovies,
+    getSelectByIdMovies,
     // setInsertMovies,
     // setUpdateMovies,
     // setDeleteMovies
