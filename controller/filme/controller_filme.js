@@ -9,46 +9,89 @@
 const filmeDAO = require('../../model/DAO/filme.js')
 
 //Import do arquivo de mensagens 
-const MESSAGES = require('../modulo/config_message.js')
+const DEFAULT_MESSAGES = require('../modulo/config_message.js')
 
 
 //Retorna uma lista de todos os filmes
-const listarFilmes = async function() {
+const listarFilmes = async function () {
 
-    //chama a funão do DAO para retornar a lista de filmes do BD
-    let resultFilmes = await filmeDAO.getSelectAllMovies();
+    try { 
+        
+        // Criando um objeto novo para as mensagens
+        let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
-    if(resultFilmes) {
-        if(resultFilmes.length > 0) {
+        // chama a funão do DAO para retornar a lista de filmes do BD
+        let resultFilmes = await filmeDAO.getSelectAllMovies();
 
-            //Se ele cair nesta condicional 
-            MESSAGES.MESSAGE_HEADER.status = MESSAGES.MESSAGE_REQUEST_SUCESS.status,
-            MESSAGES.MESSAGE_HEADER.status_code = MESSAGES.MESSAGE_REQUEST_SUCESS.status_code,
-            MESSAGES.MESSAGE_HEADER.items.filmes = resultFilmes;
+        // é o retorno do DAO
+        if (resultFilmes) {
+            if (resultFilmes.length > 0) {
 
-            return MESSAGES.MESSAGE_HEADER;
+                // Se ele cair nesta condicional 
+                MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status,
+                MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code,
+                MESSAGES.DEFAULT_HEADER.items.filmes = resultFilmes;
+
+                return MESSAGES.DEFAULT_HEADER //200
+            } else {
+                return MESSAGES.ERROR_NOT_FOUND //404
+            }
+        } else {
+            return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
         }
-    } 
-    
-}
+
+    } catch (error) {
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}; 
+
 
 //Retorna um filme filtrando pelo id
-const buscarFilmesId = async function(id) {
+const buscarFilmesId = async function (id) {
+
+    try {
+        
+        //Criando um objeto novo para as mensagens
+        let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+
+
+        //se for ao contrario do falso, entra e continua o fluxo
+        //Validação da chegada do ID
+        if(!isNaN(id)) {
+            let resultFilmes = await filmeDAO.getSelectByIdMovies(Number(id));
+            
+            if(resultFilmes){
+                if(resultFilmes.length > 0){
+                } else {
+                    return MESSAGES.ERROR_NOT_FOUND //404
+                }
+            } else {
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+            
+        } else {
+            return MESSAGES.ERROR_REQUIRED_FIELDS //400
+        }
+
+    } catch (error) {
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+
 
 }
 
 //Insere um filme
-const inserirFilme = async function(filme) {
+const inserirFilme = async function (filme) {
 
 }
 
 //Atualiza um filme buscando pelo id
-const atualizarFilme = async function(filme, id) {
+const atualizarFilme = async function (filme, id) {
 
 }
 
 //Deleta um filme filtrando pelo id
-const excluirFilme = async function(id) {
+const excluirFilme = async function (id) {
 
 }
 
