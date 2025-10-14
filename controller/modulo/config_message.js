@@ -24,9 +24,13 @@ const DEFAULT_HEADER = {
 const SUCESS_REQUEST = {
     status: true,
     status_code: 200,
-    message: 'Requisição bem sucedida',
-    items: {}
+    message: 'Requisição bem sucedida'
+}
 
+const SUCCESS_CREATED_ITEM = {
+    status: true,
+    status_code: 201,
+    message: 'Item criado com sucesso!'
 }
 
 /************************MENSAGENS DE ERR0******************** */
@@ -52,14 +56,24 @@ const ERROR_INTERNAL_SERVER_CONTROLLER = {
 const ERROR_REQUIRED_FIELDS = {
     status: false,
     status_code: 400,
-    message: 'Não foi possível processar a requisição pois existem campos obrigatórios que devem ser encaminhados ou estão incorretos!'
+    message: 'Não foi possível processar a requisição, pois existem campos obrigatórios que devem ser encaminhados ou estão incorretos!'
 }
+
+const ERROR_CONTENT_TYPE = {
+    status: false,
+    status_code: 415,
+    message: 'Não foi possível processar a requisição, pois o tipo de dados enviado no corpo deve ser JSON!'
+}
+
+
 
 module.exports = {
     DEFAULT_HEADER,
     SUCESS_REQUEST,
+    SUCCESS_CREATED_ITEM,
     ERROR_NOT_FOUND,
     ERROR_INTERNAL_SERVER_MODEL,
     ERROR_INTERNAL_SERVER_CONTROLLER,
-    ERROR_REQUIRED_FIELDS
+    ERROR_REQUIRED_FIELDS,
+    ERROR_CONTENT_TYPE
 }   
