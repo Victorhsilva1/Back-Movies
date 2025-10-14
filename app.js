@@ -13,7 +13,7 @@ const bodyParser = require('body-parser') // Responsável por gerenciar a chegad
 const bodyParserJson = bodyParser.json()
 
 // Retorna a porta do servidor atual ou colocamos uma porta local 
-const PORT = process.PORT || 8080
+const PORT = process.PORT || 8000
 
 // Criando uma instancia de uma classe do express
 const app = express()
@@ -75,5 +75,5 @@ app.post('/v1/locadora/filme', cors(), bodyParserJson, async function (request, 
 })
 
 app.listen(PORT, function(){
-    console.log('API rodando em http://localhost:8080')
+    console.log('API rodando em http://localhost:8000')
   })

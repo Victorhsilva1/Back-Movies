@@ -49,10 +49,13 @@ const listarFilmes = async function () {
 //Retorna um filme filtrando pelo id
 const buscarFilmesId = async function (id) {
 
+
+    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+
     try {
 
         //Criando um objeto novo para as mensagens
-        let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+        
 
 
         //se for ao contrario do falso, entra e continua o fluxo
@@ -87,6 +90,9 @@ const buscarFilmesId = async function (id) {
 //contentType é o tipo de  conteúdo 
 const inserirFilme = async function (filme, contentType) {
 
+
+    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+
     try {
 
         //Validação do tipo de conteúdo da requisiçaõ obrigatório ser um JSON, em maiusculo como String
@@ -102,11 +108,11 @@ const inserirFilme = async function (filme, contentType) {
                 MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Sinopse Incorreto]' 
                 return MESSAGES.ERROR_REQUIRED_FIELDS //400
         } else if (
-             filme.data_lancamento == undefined || filme.data_lancamento.length == 10) {
+             filme.data_lancamento == undefined || filme.data_lancamento.length != 10) {
                 MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Data de Lançamento Incorreto]' 
                 return MESSAGES.ERROR_REQUIRED_FIELDS //400
         }else if (
-            filme.duracao == '' || filme.duracao == null || filme.duracao != undefined || filme.duracao.length > 8) {
+            filme.duracao == '' || filme.duracao == null || filme.duracao == undefined || filme.duracao.length > 8) {
                 MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Duração Incorreto]' 
                 return MESSAGES.ERROR_REQUIRED_FIELDS //400
         }else if(
