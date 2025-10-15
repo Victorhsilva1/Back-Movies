@@ -78,7 +78,7 @@ const getSelectByIdMovies = async function (id) {
         let sql = `select * from tbl_filme where id=${id}`;
 
         //Encaminha para o BD o Script SQL
-         // quando ele devolve algo usa-se o query
+        // quando ele devolve algo usa-se o query
         let result = await prisma.$queryRawUnsafe(sql);
 
         if (Array.isArray(result))
@@ -95,8 +95,8 @@ const getSelectByIdMovies = async function (id) {
 //Função que insere um filme novo no banco de dados
 const setInsertMovies = async function (filme) {
 
-        try {
-            let sql = `INSERT INTO tbl_filme (
+    try {
+        let sql = `INSERT INTO tbl_filme (
     nome,
     sinopse,
     data_lancamento,
@@ -122,36 +122,36 @@ const setInsertMovies = async function (filme) {
         else
             return false
 
-        } catch (error) {
-            return false
-        }
-
-
+    } catch (error) {
+        return false
     }
+
+
+}
 
 //Função que altera um filme no banco de dados
 const setUpdateMovies = async function (filme) {
 
     try {
-        let sql = `update tbl_filme set (
-nome = '${filme.nome}',
-sinopse = '${filme.sinopse}',
-data_lancamento = '${filme.data_lancamento}',
-duracao = '${filme.duracao}',
-orcamento = '${filme.orcamento}',
-trailer = '${filme.trailer}',
-capa = '${filme.capa}'
+                let sql = `update tbl_filme set (
+        nome = '${filme.nome}',
+        sinopse = '${filme.sinopse}',
+        data_lancamento = '${filme.data_lancamento}',
+        duracao = '${filme.duracao}',
+        orcamento = '${filme.orcamento}',
+        trailer = '${filme.trailer}',
+        capa = '${filme.capa}'
 
-where id = ${id}`
+        where id = ${filme.id}`
 
 
-    // quando ele devolve algo usa-se o query
-    // agora quando nao tem o retorno de valor tem que ser o execute 
-    let result = await prisma.$executeRawUnsafe(sql)
-    if (result)
-        return true
-    else
-        return false
+        // quando ele devolve algo usa-se o query
+        // agora quando nao tem o retorno de valor tem que ser o execute 
+        let result = await prisma.$executeRawUnsafe(sql)
+        if (result)
+            return true
+        else
+            return false
 
     } catch (error) {
         return false
@@ -163,13 +163,26 @@ where id = ${id}`
 //Função que deleta um filme pelo ID no banco de dados
 const setDeleteMovies = async function (id) {
 
+    try {
+        
+        //usando o delete com o where para falar em qual id será deletado 
+        let sql = `delete from tbl_filme where id = ${id}`
 
+        let result = await prisma.$executeRawUnsafe(sql)
+
+        if (result)
+            return true
+        else
+            return false
+
+    } catch (error) {
+        return false
+    }
 }
-
 module.exports = {
     getSelectAllMovies,
     getSelectByIdMovies,
     setInsertMovies,
-    setUpdateMovies
-    // setDeleteMovies
+    setUpdateMovies,
+    setDeleteMovies
 }

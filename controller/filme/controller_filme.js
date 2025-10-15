@@ -56,8 +56,6 @@ const buscarFilmesId = async function (id) {
 
         //Criando um objeto novo para as mensagens
 
-
-
         //se for ao contrario do falso, entra e continua o fluxo
         //Validação da chegada do ID
         if (!isNaN(id) && id !== '' && id !== null && id > 0) {
@@ -78,6 +76,7 @@ const buscarFilmesId = async function (id) {
             }
 
         } else {
+            MESSAGES.ERROR_REQUIRED_FIELDS.message += '[ID Incorreto]'
             return MESSAGES.ERROR_REQUIRED_FIELDS //400
         }
 
@@ -118,7 +117,7 @@ const inserirFilme = async function (filme, contentType) {
                     return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                 }
 
-            }else {
+            } else {
                 return validar //400 problemas nos atributos
             }
 
@@ -133,15 +132,90 @@ const inserirFilme = async function (filme, contentType) {
 }
 
 //Atualiza um filme buscando pelo id
-const atualizarFilme = async function (filme, id) {
+const atualizarFilme = async function (filme, id, contentType) {
+
+    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+
+    try {
+        //Validação do tipo de conteúdo da requisiçaõ obrigatório ser um JSON, em maiusculo como String
+        if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
+
+            //Chama a função de validar todos os dados do filme
+            let validar = await validarDadosFilmes(filme)
+
+            if (!validar) {
+                //Validação de ID valido, chama a função da controller que verifica no BD se o ID existe e valido o ID
+                let validarID = await buscarFilmesId(id)
+
+                if (validarID.status_code == 200) {
+
+                    //Adiciona o ID do filme no JSON de dados para ser encaminhado ao DAO 
+                    filme.id = Number(id)
+
+                    //Chama a função para inserir um novo filme no banco de dados
+                    let resultFilmes = await filmeDAO.setInsertMovies(filme)
+
+                    if (resultFilmes) {
+                        MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_UPDATED_ITEM.status
+                        MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
+                        MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_UPDATED_ITEM.message //Item criado com sucesso!
+                        MESSAGES.DEFAULT_HEADER.items.filmes = filme
 
 
+                        return MESSAGES.DEFAULT_HEADER //201 || Item criado com sucesso!
+
+                    } else {
+                        return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+                    }
+                } else {
+                    return validarID // a função buscarFilmeID poderá retornar (400, 404 ou 500)
+                }
+
+            } else {
+                return validar //400 referente a validação dos dados = problemas nos atributos
+            }
+
+        } else {
+            return MESSAGES.ERROR_CONTENT_TYPE //415
+        }
+
+    } catch (error) {
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
 }
 
 //Deleta um filme filtrando pelo id
 const excluirFilme = async function (id) {
 
+    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+
+    try {
+        //Validação de ID valido, chama a função da controller que verifica no BD se o ID existe e valido o ID
+        let validarID = await buscarFilmesId(id)
+
+        if (validarID.status_code == 200) {
+            //Chama a função para deletar um filme no banco de dados
+            let resultFilmes = await filmeDAO.setDeleteMovies(Number(id))
+
+            if (resultFilmes) {
+                MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_DELETED_ITEM.status
+                MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
+                MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_DELETED_ITEM.message
+
+                return MESSAGES.DEFAULT_HEADER //200 || Item excluído com sucesso!
+
+            } else {
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        } else {
+            return validarID // a função buscarFilmeID poderá retornar (400, 404 ou 500)
+        }
+
+    } catch (error) {
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
 }
+
 
 //Validação dos dados de cadastro e atualização do filme
 const validarDadosFilmes = async function (filme) {
@@ -188,7 +262,7 @@ module.exports = {
     listarFilmes,
     buscarFilmesId,
     inserirFilme,
-    validarDadosFilmes
-    // atualizarFilme,
-    // excluirFilme
+    validarDadosFilmes,
+    atualizarFilme,
+    excluirFilme
 }

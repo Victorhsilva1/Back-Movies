@@ -74,6 +74,37 @@ app.post('/v1/locadora/filme', cors(), bodyParserJson, async function (request, 
 
 })
 
+app.put ('/v1/locadora/filme/:id', cors(), bodyParserJson, async function (request, response) {
+
+    //Recebe o content-type da requisição (JSON ou XML ou ...) 
+    let contentType = request.headers['content-type']
+
+    // Rece os dados do body da requisição (Se você utilizar o bodyParser, é obrigatório ter no endPoint)
+    let dadosBody = request.body
+
+    //Recebe o ID encaminhado via parametro na requisição
+    let idFilme = request.params.id
+
+    //Insere ou Encaminha os dados e o contentType para a controller
+    let filme = await controllerfilme.atualizarFilme(dadosBody, idFilme, contentType)
+
+    response.status(filme.status_code)
+    response.json(filme)
+
+})
+
+app.delete('/v1/locadora/filme/:id', cors(), async function (request, response) {
+
+    //Recebe o ID encaminhado via parametro na requisição
+    let idFilme = request.params.id
+
+    //Chama a função para deletar o filme do BD
+    let filme = await controllerfilme.excluirFilme(idFilme)
+
+    response.status(filme.status_code)
+    response.json(filme)
+})
+
 app.listen(PORT, function(){
     console.log('API rodando em http://localhost:8000')
   })
