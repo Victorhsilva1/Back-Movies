@@ -96,7 +96,6 @@ const inserirFilme = async function (filme, contentType) {
         //Validação do tipo de conteúdo da requisiçaõ obrigatório ser um JSON, em maiusculo como String
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
-
             //Chama a função de validar todos os dados do filme
             let validar = await validarDadosFilmes(filme)
 
@@ -107,11 +106,21 @@ const inserirFilme = async function (filme, contentType) {
                 let resultFilmes = await filmeDAO.setInsertMovies(filme)
 
                 if (resultFilmes) {
-                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_CREATED_ITEM.status
-                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
-                    MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_CREATED_ITEM.message //Item criado com sucesso!
+                    //Chama a função para receber o ID gerado no Banco de Dados
+                    let lastId = await filmeDAO.getSelectLastId()
+                    if (lastId) {
+                        //Adiciona o ID no JSON com os dados do filme
+                        filme.id = lastId
+                        MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_CREATED_ITEM.status
+                        MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
+                        MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_CREATED_ITEM.message //Item criado com sucesso!
+                        MESSAGES.DEFAULT_HEADER.items = filme
 
-                    return MESSAGES.DEFAULT_HEADER //201 || Item criado com sucesso!
+
+                        return MESSAGES.DEFAULT_HEADER //201 || Item criado com sucesso!
+                    } else {
+                        return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+                    }
 
                 } else {
                     return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
@@ -193,7 +202,7 @@ const excluirFilme = async function (id) {
         //Validação de ID valido, chama a função da controller que verifica no BD se o ID existe e valido o ID
         let validarID = await buscarFilmesId(id)
 
-        if (validarID.status_code == 200) {
+        if (isNaN(id) && id !== '' && id !== null && id > 0) {
             //Chama a função para deletar um filme no banco de dados
             let resultFilmes = await filmeDAO.setDeleteMovies(Number(id))
 
