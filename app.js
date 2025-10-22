@@ -178,6 +178,9 @@ app.delete('/v1/locadora/genero/:id', cors(), async function (request, response)
     response.json(genero)
 })
 
+// -----------------------------------------------------
+//                          IDIOMA 
+// ----------------------------------------------------
 
 app.listen(PORT, function () {
     console.log('API rodando em http://localhost:8000')
