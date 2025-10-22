@@ -27,6 +27,7 @@ const listarIdiomas = async function () {
                 return MESSAGES.DEFAULT_HEADER //200
             } else {
                 return MESSAGES.ERROR_NOT_FOUND //404
+            }
             } else {
                 return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
             }
@@ -34,53 +35,53 @@ const listarIdiomas = async function () {
         } catch (error) {
             return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
         }
-    }
+}
 
 const buscarIdiomaId = async function (id) {
-        try {
+    try {
 
-        } catch (error) {
+    } catch (error) {
 
-        }
     }
+}
 
-    const inserirIdioma = async function (idioma, contentType) {
-        try {
+const inserirIdioma = async function (idioma, contentType) {
+    try {
 
-        } catch (error) {
+    } catch (error) {
 
-        }
     }
+}
 
-    const validarDadosIdioma = async function (idioma) {
-        try {
+const validarDadosIdioma = async function (idioma) {
+    try {
 
-        } catch (error) {
+    } catch (error) {
 
-        }
     }
+}
 
-    const atualizarIdioma = async function (idioma, id, contentType) {
-        try {
+const atualizarIdioma = async function (idioma, id, contentType) {
+    try {
 
-        } catch (error) {
+    } catch (error) {
 
-        }
     }
+}
 
-    const excluirIdioma = async function (id) {
-        try {
+const excluirIdioma = async function (id) {
+    try {
 
-        } catch (error) {
+    } catch (error) {
 
-        }
     }
+}
 
-    module.exports = {
-        listarIdiomas,
-        buscarIdiomaId,
-        inserirIdioma,
-        validarDadosIdioma,
-        atualizarIdioma,
-        excluirIdioma
-    }
+module.exports = {
+    listarIdiomas,
+    buscarIdiomaId,
+    inserirIdioma,
+    validarDadosIdioma,
+    atualizarIdioma,
+    excluirIdioma
+}

@@ -182,6 +182,20 @@ app.delete('/v1/locadora/genero/:id', cors(), async function (request, response)
 //                          IDIOMA 
 // ----------------------------------------------------
 
+const controllerIdioma = require('./controller/idioma/controller_idioma.js')
+
+//EndPoints para a rota de Filme
+
+app.get('/v1/locadora/idioma', cors(), async function (request, response) {
+
+    //Chama a função para listar os filmes do BD
+    let idioma = await controllerIdioma.listarIdiomas();
+
+    response.status(idioma.status_code)
+    response.json(idioma)
+})
+
+
 app.listen(PORT, function () {
     console.log('API rodando em http://localhost:8000')
 })
