@@ -166,6 +166,19 @@ app.put('/v1/locadora/genero/:id', cors(), bodyParserJson, async function (reque
     response.json(genero)
 })
 
+app.delete('/v1/locadora/genero/:id', cors(), async function (request, response) {
+
+    //Recebe o ID encaminhado via parametro na requisição
+    let idGenero = request.params.id
+
+    //Chama a função para deletar o filme do BD
+    let genero = await controllerGenero.excluirGenero(idGenero)
+
+    response.status(genero.status_code)
+    response.json(genero)
+})
+
+
 app.listen(PORT, function () {
     console.log('API rodando em http://localhost:8000')
 })

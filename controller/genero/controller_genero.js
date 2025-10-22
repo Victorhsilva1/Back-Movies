@@ -165,7 +165,7 @@ const atualizarGenero = async function (genero, id, contentType) {
                 if (validarID.status_code == 200) {
                     genero.id = Number(id)
 
-                    let resultGeneros = await generoDAO.setInsertGenres(genero)
+                    let resultGeneros = await generoDAO.setUpdateGenres(genero)
 
                     if (resultGeneros) {
                         MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_UPDATED_ITEM.status
@@ -196,6 +196,31 @@ const atualizarGenero = async function (genero, id, contentType) {
 }
 
 const excluirGenero = async function (id) {
+    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+
+    try {
+        let validarID = await buscarGeneroId(id)
+
+        if (!isNaN(id) && id !== '' && id !== null && id > 0) {
+            let resultGeneros = await generoDAO.setDeleteGenres(Number(id))
+            if (resultGeneros) {
+                MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_DELETED_ITEM.status
+                MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
+                MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_DELETED_ITEM.message
+                
+                return MESSAGES.DEFAULT_HEADER
+            } else {
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        }
+        else {
+            return validarID //
+        }
+    } catch (error) {
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+
+
 }
 
 module.exports = {
