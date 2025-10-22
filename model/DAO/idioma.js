@@ -14,7 +14,22 @@ const { PrismaClient } = require('../../generated/prisma')
 const prisma = new PrismaClient()
 
 const getSelectAllIdioma = async function () {
+    try {
 
+        //Script SQL
+        let sql = `select * from tbl_idioma order by id desc`;
+
+        //Encaminha para o BD o Script SQL
+        let result = await prisma.$queryRawUnsafe(sql);
+
+        if (Array.isArray(result))
+            return result;
+        else
+            return false;
+
+    } catch (error) {
+        return false;
+    }
 }
 
 const getSelectByIdIdioma = async function (id) {
