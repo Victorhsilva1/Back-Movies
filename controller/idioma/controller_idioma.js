@@ -1,5 +1,5 @@
 /**************************
- * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a MODEL para o CRUD de genero
+ * Objetivo: Arquivo responsável pela manipulação de dados entre o APP e a MODEL para o CRUD de idioma
  * Data: 07/10/2025
  * Autor: Victor Hugo
  * Versão: 1.0

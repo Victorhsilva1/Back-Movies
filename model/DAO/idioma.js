@@ -1,5 +1,5 @@
 /**************************
- * Objetivo: Arquivo responsável pelo CRUD de dados no MySQL referente ao genero
+ * Objetivo: Arquivo responsável pelo CRUD de dados no MySQL referente ao idioma
  * Data: 01/10/2025
  * Autor: Victor Hugo
  * Versão: 1.0
@@ -110,7 +110,7 @@ const setDeleteIdioma = async function (id) {
         let sql = `delete from tbl_idioma where id_idioma = ${id}`; 
 
         let result = await prisma.$executeRawUnsafe(sql)
-        
+
         if (result) {
             return true
         } else {
