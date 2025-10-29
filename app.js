@@ -252,6 +252,31 @@ app.delete('/v1/locadora/idioma/:id', cors(), async function (request, response)
     response.json(idioma)
 })
 
+
+// -------------------- PERSONAGEM ---------------------
+
+const controllerPersonagem = require('./controller/personagem/controller_personagem.js')
+
+app.get('/v1/locadora/personagem', cors(), async function (request, response) {
+
+})
+
+app.get('/v1/locadora/personagem/:id', cors(), async function (request, response) {
+
+})
+
+app.post('/v1/locadora/personagem', cors(), bodyParserJson, async function (request, response) {
+})
+
+app.put('/v1/locadora/personagem/:id', cors(), bodyParserJson, async function (request, response) {
+    
+})
+
+app.delete('/v1/locadora/personagem/:id', cors(), async function (request, response) {
+
+})
+
+
 app.listen(PORT, function () {
     console.log('API rodando em http://localhost:8000')
 })
