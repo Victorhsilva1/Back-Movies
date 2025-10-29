@@ -18,14 +18,14 @@ const listarGeneros = async function () {
         let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
         // chama a funão do DAO para retornar a lista de filmes do BD
-        let resultGeneros = await generoDAO.getSelectAllGenres();
+        let resultGeneros = await generoDAO.getSelectAllGenres()
 
         // é o retorno do DAO
         if (resultGeneros) {
             if (resultGeneros.length > 0) {
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status,
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code,
-                    MESSAGES.DEFAULT_HEADER.items.generos = resultGeneros;
+                    MESSAGES.DEFAULT_HEADER.items.generos = resultGeneros
 
                 return MESSAGES.DEFAULT_HEADER //200
             } else {
@@ -57,7 +57,7 @@ const buscarGeneroId = async function (id) {
                 if (resultGeneros.length > 0) {
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status,
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code,
-                        MESSAGES.DEFAULT_HEADER.items.generos = resultGeneros;
+                        MESSAGES.DEFAULT_HEADER.items.generos = resultGeneros
 
                     return MESSAGES.DEFAULT_HEADER //200
                 } else {
