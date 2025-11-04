@@ -337,7 +337,66 @@ app.get('/v1/locadora/ator', cors(), async function (request, response) {
     response.json(ator)
 })
 
+app.get('/v1/locadora/ator/:id', cors(), async function (request, response) {
+    //Recebe o ID encaminhado via parametro na requisição
+    let idAtor = request.params.id
+
+    //Chama a função para listar os filmes do BD
+    let ator = await controllerAtor.buscarAtoresId(idAtor);
+
+    response.status(ator.status_code)
+    response.json(ator)
+})
+
+app.post('/v1/locadora/ator', cors(), bodyParserJson, async function (request, response) {
+    //Recebe o content-type da requisição (JSON ou XML ou ...)
+    let contentType = request.headers['content-type']
+
+    // Rece os dados do body da requisição (Se você utilizar o bodyParser, é obrigatório ter no endPoint)
+    let dadosBody = request.body
+
+    //Chama a função para listar os filmes do BD
+    let ator = await controllerAtor.inserirAtor(dadosBody, contentType);
+
+    response.status(ator.status_code)
+    response.json(ator)
+
+})
+
+app.put('/v1/locadora/ator/:id', cors(), bodyParserJson, async function (request, response) {
+
+    //Recebe o content-type da requisição (JSON ou XML ou ...) 
+    let contentType = request.headers['content-type']
+
+    // Rece os dados do body da requisição (Se você utilizar o bodyParser, é obrigatório ter no endPoint)
+    let dadosBody = request.body
+
+    //Recebe o ID encaminhado via parametro na requisição
+    let idAtor = request.params.id
+
+    //Insere ou Encaminha os dados e o contentType para a controller
+    let ator = await controllerAtor.atualizarAtor(dadosBody, idAtor, contentType)
+
+    response.status(ator.status_code)
+    response.json(ator)
+
+})
+
+app.delete('/v1/locadora/ator/:id', cors(), async function (request, response) {
+
+    //Recebe o ID encaminhado via parametro na requisição
+    let idAtor = request.params.id
+
+    //Chama a função para deletar o ator do BD
+    let ator = await controllerAtor.excluirAtor(idAtor)
+
+    response.status(ator.status_code)
+    response.json(ator)
+})
+
+
+
+
 app.listen(PORT, function () {
     console.log('API rodando em http://localhost:8000')
 })
-
