@@ -61,8 +61,7 @@ const atorRouter = require('./routes/atorRoutes.js');
 app.use('/v1/locadora/ator', atorRouter);
 
 
-
-
+// listen
 
 app.listen(PORT, function () {
     console.log('API rodando em http://localhost:8000')

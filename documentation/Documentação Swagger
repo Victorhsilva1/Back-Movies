@@ -1,0 +1,491 @@
+openapi: 3.0.3
+info:
+  title: Projeto do SENAI Jandira - Victor Hugo
+  description: |
+    API destinada ao Senai Jandira na disciplina de Back-End do professor Marcel com o objetivo de criar uma API_Locadora, com API + MVC + Banco de Dados
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: victor.hsilva2703@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8000
+paths:
+  /v1/filmes:
+    get:
+      tags:
+        - TBL_FILME
+      summary: Listar Filmes
+      responses:
+        '200':
+          description: Lista de filmes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Filme'
+    post:
+      tags:
+        - TBL_FILME
+      summary: Inserir novo filme
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Filme'
+      responses:
+        '201':
+          description: Filme criado com sucesso
+  /v1/filmes/{id}:
+    get:
+      tags:
+        - TBL_FILME
+      summary: Buscar filmes pelo ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Filme encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Filme'
+    put:
+      tags:
+        - TBL_FILME
+      summary: Atualizar filme
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Filme'
+      responses:
+        '200':
+          description: Filme atualizado com sucesso
+    delete:
+      tags:
+        - TBL_FILME
+      summary: Deletar um filme
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Filme deletado com sucesso
+
+  /v1/generos:
+    get:
+      tags:
+        - TBL_GENERO
+      summary: Listar Gêneros
+      responses:
+        '200':
+          description: Lista de gêneros
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Genero'
+    post:
+      tags:
+        - TBL_GENERO
+      summary: Inserir novo Gênero
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Genero'
+      responses:
+        '201':
+          description: Gênero criado com sucesso
+  /v1/generos/{id}:
+    get:
+      tags:
+        - TBL_GENERO
+      summary: Buscar Gênero pelo ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Gênero encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genero'
+    put:
+      tags:
+        - TBL_GENERO
+      summary: Atualizar Gênero
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Genero'
+      responses:
+        '200':
+          description: Gênero atualizado com sucesso
+    delete:
+      tags:
+        - TBL_GENERO
+      summary: Deletar um Gênero
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Gênero deletado com sucesso
+
+  /v1/idiomas:
+    get:
+      tags:
+        - TBL_IDIOMA
+      summary: Listar idiomas
+      responses:
+        '200':
+          description: Lista de idiomas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Idioma'
+    post:
+      tags:
+        - TBL_IDIOMA
+      summary: Inserir novo Idioma
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Idioma'
+      responses:
+        '201':
+          description: Idioma criado com sucesso
+  /v1/idiomas/{id}:
+    get:
+      tags:
+        - TBL_IDIOMA
+      summary: Buscar idioma pelo ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Idioma encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Idioma'
+    put:
+      tags:
+        - TBL_IDIOMA
+      summary: Atualizar Idioma
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Idioma'
+      responses:
+        '200':
+          description: Idioma atualizado com sucesso
+    delete:
+      tags:
+        - TBL_IDIOMA
+      summary: Deletar um idioma
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Idioma deletado com sucesso
+
+  /v1/personagens:
+    get:
+      tags:
+        - TBL_PERSONAGEM
+      summary: Listar Personagens
+      responses:
+        '200':
+          description: Lista de personagens
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Personagem'
+    post:
+      tags:
+        - TBL_PERSONAGEM
+      summary: Inserir novo personagem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Personagem'
+      responses:
+        '201':
+          description: Personagem criado com sucesso
+  /v1/personagens/{id}:
+    get:
+      tags:
+        - TBL_PERSONAGEM
+      summary: Buscar Personagem pelo ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Personagem encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Personagem'
+    put:
+      tags:
+        - TBL_PERSONAGEM
+      summary: Atualizar personagem
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Personagem'
+      responses:
+        '200':
+          description: Personagem atualizado com sucesso
+    delete:
+      tags:
+        - TBL_PERSONAGEM
+      summary: Deletar um personagem
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Personagem deletado com sucesso
+
+  /v1/atores:
+    get:
+      tags:
+        - TBL_ATOR
+      summary: Listar Ator
+      responses:
+        '200':
+          description: Lista de atores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ator'
+    post:
+      tags:
+        - TBL_ATOR
+      summary: Inserir novo Ator
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ator'
+      responses:
+        '201':
+          description: Ator criado com sucesso
+  /v1/atores/{id}:
+    get:
+      tags:
+        - TBL_ATOR
+      summary: Buscar Ator pelo ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Ator encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ator'
+    put:
+      tags:
+        - TBL_ATOR
+      summary: Atualizar um Ator
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ator'
+      responses:
+        '200':
+          description: Ator atualizado com sucesso
+    delete:
+      tags:
+        - TBL_ATOR
+      summary: Deletar um Ator
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Ator deletado com sucesso
+
+components:
+  schemas:
+    Filme:
+      required:
+        - titulo
+        - idioma_id
+        - genero_id
+      type: object
+      properties:
+        id:
+          type: integer
+        titulo:
+          type: string
+        sinopse:
+          type: string
+        idioma_id:
+          type: integer
+        genero_id:
+          type: integer
+
+    Genero:
+      required:
+        - nome
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+
+    Idioma:
+      required:
+        - nome
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        sigla:
+          type: string
+
+    Personagem:
+      required:
+        - nome
+        - filme_id
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        filme_id:
+          type: integer
+        ator_id:
+          type: integer
+
+    Ator:
+      required:
+        - nome
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        data_nascimento:
+          type: string
