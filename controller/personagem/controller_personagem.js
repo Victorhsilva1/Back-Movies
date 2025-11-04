@@ -135,11 +135,11 @@ const atualizarPersonagem = async function (personagem, id, contentType) {
     
                         if (resultPersonagens) {
                         MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_CREATED_ITEM.status
-                        MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
+                        MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code;
                         MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_UPDATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items.personagem = personagem
+                        MESSAGES.DEFAULT_HEADER.items.personagens = personagem
                             
-                            return MESSAGES.DEFAULT_HEADER; // 200
+                            return MESSAGES.DEFAULT_HEADER // 200
                         } else {
                             return MESSAGES.ERROR_INTERNAL_SERVER_MODEL; // 500
                         }
@@ -154,11 +154,36 @@ const atualizarPersonagem = async function (personagem, id, contentType) {
             }
         } catch (error) {
             return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER; // 500
-        }
+    }
 }
 
 const excluirPersonagem = async function (id) {
+    let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES));
+
+    try {
+        let validarID = await buscarPersonagemId(id)
+
+        if (validarID.status_code == 200) {
+            let resultPersonagens = await personagemDAO.setDeletePersonagem(Number(id));
+
+            if (resultPersonagens) {
+                MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_DELETED_ITEM.status
+                MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
+                MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCCESS_DELETED_ITEM.message
+
+                return MESSAGES.DEFAULT_HEADER // 200
+            } else {
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL // 500
+            }
+        } else {
+            return validarID // 404 ou 400
+        }
+    } catch (error) {
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER // 500
+    
+        }
 }
+
 
 const validarDadosPersonagem = async function (personagem) {
      let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES));
