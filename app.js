@@ -314,9 +314,28 @@ app.put('/v1/locadora/personagem/:id', cors(), bodyParserJson, async function (r
 })
 
 app.delete('/v1/locadora/personagem/:id', cors(), async function (request, response) {
+    //Recebe o ID encaminhado via parametro na requisição
+    let idPersonagem = request.params.id
+
+    //Chama a função para deletar o filme do BD
+    let personagem = await controllerPersonagem.excluirPersonagem(idPersonagem)
+
+    response.status(personagem.status_code)
+    response.json(personagem)
 
 })
 
+
+// ------------ ATOR ---------
+
+const controllerAtor = require('./controller/ator/controller_ator.js')
+
+app.get('/v1/locadora/ator', cors(), async function (request, response) {
+    let ator = await controllerAtor.listarAtores();
+
+    response.status(ator.status_code)
+    response.json(ator)
+})
 
 app.listen(PORT, function () {
     console.log('API rodando em http://localhost:8000')
