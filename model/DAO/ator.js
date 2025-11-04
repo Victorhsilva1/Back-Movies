@@ -83,6 +83,7 @@ const setUpdateAtores = async function (ator) {
         biografia = '${ator.biografia}',
         data_nascimento = '${ator.data_nascimento}',
         nacionalidade = '${ator.nacionalidade}'
+        
         where id = ${ator.id}`
 
 
