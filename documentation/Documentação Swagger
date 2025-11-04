@@ -426,8 +426,6 @@ components:
     Filme:
       required:
         - titulo
-        - idioma_id
-        - genero_id
       type: object
       properties:
         id:
@@ -436,10 +434,7 @@ components:
           type: string
         sinopse:
           type: string
-        idioma_id:
-          type: integer
-        genero_id:
-          type: integer
+
 
     Genero:
       required:
@@ -473,10 +468,6 @@ components:
           type: integer
         nome:
           type: string
-        filme_id:
-          type: integer
-        ator_id:
-          type: integer
 
     Ator:
       required:
