@@ -9,7 +9,7 @@
 const filmeGeneroDAO = require('../../model/DAO/filme_genero.js')
 
 //import do arquivo de mensagens
-const DEFAULT_MESSAGES = require('../modulo/config_messages.js')
+const DEFAULT_MESSAGES = require('../modulo/config_message.js')
 
 //FUNÇÃO DE APOIO
 //validação dos dados de cadastro e atualização do filme
@@ -19,15 +19,15 @@ const validarDadosFilmeGenero = async (filmeGenero) => {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
             
     //validações de todas as entradas de dados    
-    if (filmeGenero.id_filme <= 0 || isNaN(filmeGenero.id_filme) ||filmeGenero.id_filme == '' || filmeGenero.id_filme == undefined || filmeGenero.id_filme == null || filmeGenero.id_filme.length > 100){
+    if (filmeGenero.id_filme <= 0 || isNaN(filmeGenero.id_filme) ||filmeGenero.id_filme == '' || filmeGenero.id_filme == undefined || filmeGenero.id_filme == null){
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Id_filme inválido]'   
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (filmeGenero.id_genero <= 0 || isNaN(filmeGenero.id_genero) ||filmeGenero.id_genero == '' || filmeGenero.id_genero == undefined || filmeGenero.id_genero == null || filmeGenero.id_genero.length > 100){
+    } else if (filmeGenero.id_genero <= 0 || isNaN(filmeGenero.id_genero) ||filmeGenero.id_genero == '' || filmeGenero.id_genero == undefined || filmeGenero.id_genero == null){
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Id_genero inválido]'   
         return MESSAGES.ERROR_REQUIRED_FIELDS
     } else {
-        return falsegbs
+        return false
     }
 }
 
@@ -118,15 +118,15 @@ const inserirFilmeGenero = async (filmeGenero, contentType) => {
 
                 //processamento
                 //chama a função para inserir um novo filme no DB
-                let resultFilmesGeneros = await filmeGeneroDAO.setInsertMoviesGenres(filmeGenero)
+                let resultFilmesGeneros = await filmeGeneroDAO.setInsertFilmeGenero(filmeGenero)
 
                 if (resultFilmesGeneros){
                     //chama a função para receber o ID gerado no DB
                     let lastID = await filmeGeneroDAO.getSelectLastId()
                     // se o id for correto popular a tabela intermerdiária
                     if(lastID){
-                        //adiciona o ID no JSON com os dados do filme
-                        filmeGenero.id = lastID
+                        //adiciona o ID no JSON com os dados do relacionamento filme-genero
+                        filmeGenero.id_filme_genero = lastID
                         MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_CREATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_CREATED_ITEM.message
@@ -138,7 +138,6 @@ const inserirFilmeGenero = async (filmeGenero, contentType) => {
                     }
                     
                 } else {
-                    console.log('test')
                     return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                 }
 
@@ -179,7 +178,7 @@ const atualizarFilmeGenero = async (filmeGenero, id_filme_genero, contentType) =
                         filmeGenero.id_filme_genero = Number(id_filme_genero)
 
                         //chama a função para inserir um novo filme no DB
-                        let resultFilmesGeneros = await filmeGeneroDAO.setUpdateMoviesGenres(filmeGenero)
+                        let resultFilmesGeneros = await filmeGeneroDAO.setUpdateFilmeGenero(filmeGenero)
 
                         if (resultFilmesGeneros){
                             MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_UPDATED_ITEM.status
@@ -220,11 +219,11 @@ const excluirFilmeGenero = async (id_filme_genero) => {
         if(!isNaN(id_filme_genero) && id_filme_genero != '' && id_filme_genero != null && id_filme_genero > 0){
 
             //Validação de ID válido, chama a função da controller que verifica no BD se o ID existe e valida o ID
-            let validarID = await buscarFilmeId(id_filme_genero)
+            let validarID = await buscarFilmeGeneroId(id_filme_genero)
 
             if(validarID.status_code == 200){
 
-                let resultFilmesGeneros = await filmeGeneroDAO.setDeleteMoviesGenres(Number(id_filme_genero))
+                let resultFilmesGeneros = await filmeGeneroDAO.setDeleteFilmeGenero(Number(id_filme_genero))
 
                 if(resultFilmesGeneros){
                     

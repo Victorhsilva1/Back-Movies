@@ -6,7 +6,7 @@
 * Data: 07/10/2025
 * Versão: 1.0 (CRUD básico do filme, sem as relações com outras tabelas)
 *
-* Data: 05/11/2025
+* Data: 11/11/2025
 * Versão: 1.1 (CRUD do filme com relacionamento com a tabela genero)
 * **********************************************************************/
 
@@ -14,10 +14,10 @@
 const filmeDAO = require('../../model/DAO/filme.js')
 
 //import da controller de relação entre filme e genero
-const controllerFilmeGenero = require('./controller_filme_genero.js')
+const controllerFilmeGenero = require('./controlle_filme_genero.js')
 
 //import do arquivo de mensagens
-const DEFAULT_MESSAGES = require('../modulo/config_messages.js')
+const DEFAULT_MESSAGES = require('../modulo/config_message.js')
 
 //FUNÇÃO DE APOIO
 //validação dos dados de cadastro e atualização do filme
@@ -47,7 +47,7 @@ const validarDadosFilme = async (filme) => {
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Duração inválida]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (filme.orcamento == '' || filme.orcamento == undefined || filme.orcamento == null || filme.duracao.length > 12 || typeof(filme.orcamento) != 'number'){
+    } else if (filme.orcamento == '' || filme.orcamento == undefined || filme.orcamento == null || typeof filme.orcamento !== 'number'){
 
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Orçamento inválido]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
@@ -168,9 +168,9 @@ const inserirFilme = async (filme, contentType) => {
                         
                         filme.genero.forEach( async (genero) => {
                             //Cria o JSON com o ID do filme o ID do genero
-                            let filmeGenero = {id_filme: lastID, id_genero: genero.id_genero}
+                            let filmeGenero = {id_filme: lastID, id_genero: genero.id}
                             //Encaminha o JSON com o ID do filme e do genero para a controller_filme_genero
-                            let resultFilmesGeneros = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero)
+                            let resultFilmeGenero = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
                         })
 
                         //adiciona o ID no JSON com os dados do filme

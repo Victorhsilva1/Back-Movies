@@ -69,7 +69,7 @@ const setInsertIdioma = async function (idioma) {
 const getSelectLastId = async function () {
     try {
         //Script SQL que retorna o ultimo ID do BD
-        let sql = `select id_idioma as id from tbl_idioma order by id_idioma desc limit 1` // Retorna id_idioma como 'id'
+        let sql = `select id_idioma from tbl_idioma order by id_idioma desc limit 1` // Retorna id_idioma como 'id'
 
         let result = await prisma.$queryRawUnsafe(sql);
 
@@ -87,8 +87,8 @@ const getSelectLastId = async function () {
 const setUpdateIdioma = async function (idioma) {
     try {
         let sql = `update tbl_idioma set
-         nome_idioma = '${idioma.nome_idioma}'
-          where id_idioma = ${idioma.id_idioma}`
+         nome_idioma = '${idioma.nome_idioma}' 
+         where id_idioma = ${idioma.id_idioma}`
 
 
         // quando ele devolve algo usa-se o query
@@ -107,7 +107,7 @@ const setUpdateIdioma = async function (idioma) {
 
 const setDeleteIdioma = async function (id) {
     try {
-        let sql = `delete from tbl_idioma where id_idioma = ${id}`; 
+        let sql = `delete from tbl_idioma where id_idioma = ${id}`
 
         let result = await prisma.$executeRawUnsafe(sql)
 
