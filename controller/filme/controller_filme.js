@@ -6,7 +6,7 @@
 * Data: 07/10/2025
 * Versão: 1.0 (CRUD básico do filme, sem as relações com outras tabelas)
 *
-* Data: 11/11/2025
+* Data: 05/11/2025
 * Versão: 1.1 (CRUD do filme com relacionamento com a tabela genero)
 * **********************************************************************/
 
@@ -17,7 +17,7 @@ const filmeDAO = require('../../model/DAO/filme.js')
 const controllerFilmeGenero = require('./controlle_filme_genero.js')
 
 //import do arquivo de mensagens
-const DEFAULT_MESSAGES = require('../modulo/config_message.js')
+const DEFAULT_MESSAGES = require('../modulo/config_message.js') // Mantido config_message.js conforme seu contexto
 
 //FUNÇÃO DE APOIO
 //validação dos dados de cadastro e atualização do filme
@@ -52,7 +52,7 @@ const validarDadosFilme = async (filme) => {
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Orçamento inválido]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (filme.trailer == undefined || filme.trailer > 200){
+    } else if (filme.trailer == undefined || filme.trailer.length > 200){
 
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Trailer inválido]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
@@ -83,8 +83,8 @@ const listarFilmes = async () => {
 
         if(resultFilmes){
             if(resultFilmes.length > 0){
-                MESSAGES.DEFAULT_HEADER.status          = MESSAGES.SUCCESS_REQUEST.status
-                MESSAGES.DEFAULT_HEADER.status_code     = MESSAGES.SUCCESS_REQUEST.status_code
+                MESSAGES.DEFAULT_HEADER.status          = MESSAGES.SUCESS_REQUEST.status
+                MESSAGES.DEFAULT_HEADER.status_code     = MESSAGES.SUCESS_REQUEST.status_code
                 MESSAGES.DEFAULT_HEADER.items.filmes    = resultFilmes
 
                 return MESSAGES.DEFAULT_HEADER //200
@@ -110,13 +110,13 @@ const buscarFilmeId = async (id) => {
         
         //validação da chegada do ID
         if(!isNaN(id) && id != '' && id != null && id > 0){
-            let resultFilmes = await filmeDAO.getSelectMoviesById(Number(id))
+            let resultFilmes = await filmeDAO.getSelectByIdMovies(Number(id))
 
             if(resultFilmes){
                 if(resultFilmes.length > 0){
 
-                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
-                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
+                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status
+                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code
                     MESSAGES.DEFAULT_HEADER.items.filmes = resultFilmes
 
                     return MESSAGES.DEFAULT_HEADER
@@ -160,25 +160,33 @@ const inserirFilme = async (filme, contentType) => {
 
                 if (resultFilmes){
                     //chama a função para receber o ID gerado no DB
-                    let lastID = await filmeDAO.getSelectLastId()
+                    let lastID = await filmeDAO.getSelectLastId() // Mantido getSelectLastId (lowercase d) para corresponder ao DAO
 
                     if(lastID){
 
                         //processar a inserção dos dados na tabela de relação entre filme e genero
-                        
-                        filme.genero.forEach( async (genero) => {
+                        for (const genero of filme.genero) { // Alterado forEach para for...of
                             //Cria o JSON com o ID do filme o ID do genero
                             let filmeGenero = {id_filme: lastID, id_genero: genero.id}
                             //Encaminha o JSON com o ID do filme e do genero para a controller_filme_genero
                             let resultFilmeGenero = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
-                        })
+                            if(resultFilmeGenero.status_code != 201){ // Adicionada verificação de sucesso
+                                return MESSAGES.ERROR_RELATIONAL_INSERTION //500
+                            }
+                        }
 
                         //adiciona o ID no JSON com os dados do filme
                         filme.id = lastID
                         MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_CREATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_CREATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items       = filme
+
+                        delete filme.genero
+                        
+                        let resultDadosGeneros = await controllerFilmeGenero.listarGenerosIdFilme(lastID)
+                        filme.genero = resultDadosGeneros
+
+                        MESSAGES.DEFAULT_HEADER.items.filme = filme // Corrigido para adicionar o filme dentro de items
 
                         return MESSAGES.DEFAULT_HEADER //201
                     } else {
@@ -186,7 +194,6 @@ const inserirFilme = async (filme, contentType) => {
                     }
                     
                 } else {
-                    console.log('test')
                     return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                 }
 
@@ -287,7 +294,7 @@ const excluirFilme = async (id) => {
                     return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                 }
             }else{
-                return MESSAGES.ERROR_NOT_FOUND //404
+                return validarID // Retorna a mensagem de erro de buscarFilmeId (400 ou 404)
             }
         }else{
             MESSAGES.ERROR_REQUIRED_FIELDS.message += ' [ID incorreto]'

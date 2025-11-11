@@ -45,8 +45,8 @@ const listarFilmesGeneros = async () => {
 
         if(resultFilmesGeneros){
             if(resultFilmesGeneros.length > 0){
-                MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
-                MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
+                MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status
+                MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code
                 MESSAGES.DEFAULT_HEADER.items.filmes_generos = resultFilmesGeneros
 
                 return MESSAGES.DEFAULT_HEADER //200
@@ -72,13 +72,13 @@ const buscarFilmeGeneroId = async (id_filme_genero) => {
         
         //validação da chegada do ID
         if(!isNaN(id_filme_genero) && id_filme_genero != '' && id_filme_genero != null && id_filme_genero > 0){
-            let resultFilmesGeneros = await filmeGeneroDAO.getSelectMoviesGenresById(Number(id_filme_genero))
+            let resultFilmesGeneros = await filmeGeneroDAO.getSelectByIdFilmeGenero(Number(id_filme_genero))
 
             if(resultFilmesGeneros){
                 if(resultFilmesGeneros.length > 0){
 
-                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
-                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
+                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status
+                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code
                     MESSAGES.DEFAULT_HEADER.items.filmes_generos = resultFilmesGeneros
 
                     return MESSAGES.DEFAULT_HEADER
@@ -122,7 +122,7 @@ const inserirFilmeGenero = async (filmeGenero, contentType) => {
 
                 if (resultFilmesGeneros){
                     //chama a função para receber o ID gerado no DB
-                    let lastID = await filmeGeneroDAO.getSelectLastId()
+                    let lastID = await filmeGeneroDAO.getSelectLastID() // Corrigido para getSelectLastID (maiúsculo)
                     // se o id for correto popular a tabela intermerdiária
                     if(lastID){
                         //adiciona o ID no JSON com os dados do relacionamento filme-genero
@@ -267,8 +267,8 @@ const listarGenerosIdFilme = async (id_filme) => {
             if(resultFilmesGeneros){
                 if(resultFilmesGeneros.length > 0){
 
-                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
-                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
+                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status
+                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code
                     MESSAGES.DEFAULT_HEADER.items.filmes_generos = resultFilmesGeneros
 
                     return MESSAGES.DEFAULT_HEADER
@@ -306,8 +306,8 @@ const listarFilmesIdGenero = async (id_genero) => {
             if(resultFilmesGeneros){
                 if(resultFilmesGeneros.length > 0){
 
-                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
-                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
+                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_REQUEST.status
+                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_REQUEST.status_code
                     MESSAGES.DEFAULT_HEADER.items.filmes_generos = resultFilmesGeneros
 
                     return MESSAGES.DEFAULT_HEADER

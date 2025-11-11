@@ -16,7 +16,7 @@ const getSelectAllFilmesGeneros = async function () {
 
     try {
         //Script SQL
-        // Usando o método seguro $queryRaw com template literals
+        // Usando o método seguro $queryRaw com template literals para evitar SQL Injection
         let result = await prisma.$queryRaw`SELECT * FROM tbl_filme_genero ORDER BY id_filme_genero DESC`
  
         // O prisma.$queryRaw já retorna um array, então a verificação é mais simples
@@ -166,7 +166,7 @@ const setUpdateFilmeGenero = async function (filmeGenero) {
 
     try {
         
-        let sql =`
+        let sql = `
         UPDATE tbl_filme_genero SET
             id_filme            =   ${filmeGenero.id_filme},
             id_genero           =   ${filmeGenero.id_genero}

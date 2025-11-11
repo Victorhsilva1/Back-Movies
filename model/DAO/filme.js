@@ -68,6 +68,7 @@ const getSelectAllMovies = async function () {
 
 
 
+
 //Função que retorna pelo ID o filme do banco de dados
 //Com argumento ID
 const getSelectByIdMovies = async function (id) {
@@ -133,16 +134,15 @@ const setInsertMovies = async function (filme) {
 const setUpdateMovies = async function (filme) {
 
     try {
-                let sql = `update tbl_filme set (
-        nome = '${filme.nome}',
-        sinopse = '${filme.sinopse}',
-        data_lancamento = '${filme.data_lancamento}',
-        duracao = '${filme.duracao}',
-        orcamento = '${filme.orcamento}',
-        trailer = '${filme.trailer}',
-        capa = '${filme.capa}'
-
-        where id = ${filme.id}`
+                let sql = `UPDATE tbl_filme SET
+                                nome = '${filme.nome}',
+                                sinopse = '${filme.sinopse}',
+                                data_lancamento = '${filme.data_lancamento}',
+                                duracao = '${filme.duracao}',
+                                orcamento = ${filme.orcamento},
+                                trailer = '${filme.trailer}',
+                                capa = '${filme.capa}'
+                            WHERE id = ${filme.id}`
 
 
         // quando ele devolve algo usa-se o query

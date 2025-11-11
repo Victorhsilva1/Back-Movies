@@ -22,7 +22,7 @@ router.get('/', cors(), async function (request, response) {
 
 router.get('/:id', cors(), async function (request, response) {
     let idFilme = request.params.id;
-    let filme = await controllerfilme.buscarFilmesId(idFilme);
+    let filme = await controllerfilme.buscarFilmeId(idFilme);
     response.status(filme.status_code);
     response.json(filme);
 });
