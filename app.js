@@ -60,6 +60,11 @@ app.use('/v1/locadora/personagem', personagemRouter);
 const atorRouter = require('./routes/atorRoutes.js');
 app.use('/v1/locadora/ator', atorRouter);
 
+// ------------ CLASSIFICACAO ---------
+
+const classificacaoRouter = require('./routes/classificacaoRoutes.js');
+app.use('/v1/locadora/classificacao', classificacaoRouter);
+
 
 // listen
 
