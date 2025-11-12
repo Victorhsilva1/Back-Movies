@@ -16,6 +16,9 @@ const filmeDAO = require('../../model/DAO/filme.js')
 //import da controller de relação entre filme e genero
 const controllerFilmeGenero = require('./controlle_filme_genero.js')
 
+//import da controller de classificacao
+const controllerClassificacao = require('../classificacao/controller_classificacao.js')
+
 //import do arquivo de mensagens
 const DEFAULT_MESSAGES = require('../modulo/config_message.js') // Mantido config_message.js conforme seu contexto
 
@@ -77,27 +80,32 @@ const listarFilmes = async () => {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try {
+    
         //chama a função do DAO para retornar a lista de filmes do DB
         let resultFilmes = await filmeDAO.getSelectAllMovies()
 
         if(resultFilmes){
-            //conto todos os itens que tem, se for maior que 0 >>>
-            //resultFilmes com array com todos dentro dele
             if(resultFilmes.length > 0){
-                
-                // Processamento para transformar a string de generos em um array
-                const filmesComGeneros = resultFilmes.map(filme => {
-                    const generos = filme.generos ? filme.generos.split(', ') : [];
-                    return {
-                        ...filme,
-                        classificacao: filme.nome_classificacao,
-                        generos: generos
-                    };
-                });
-                
-                MESSAGES.DEFAULT_HEADER.status          = MESSAGES.SUCESS_REQUEST.status
-                MESSAGES.DEFAULT_HEADER.status_code     = MESSAGES.SUCESS_REQUEST.status_code
-                MESSAGES.DEFAULT_HEADER.items.filmes    = filmesComGeneros
+
+                //processamento para adicionar os generos aos filmes
+                    for (filme of resultFilmes){
+                        let resultGeneros = await controllerFilmeGenero.listarGenerosIdFilme(filme.id)
+
+                        if (resultGeneros.status_code == 200) {
+                            filme.genero = resultGeneros.items.filmes_generos
+                        }
+
+                        //Busca a classificacao do filme
+                        if (filme.id_classificacao) {
+                            let resultClassificacao = await controllerClassificacao.buscarClassificacaoId(filme.id_classificacao)
+                            if (resultClassificacao.status_code == 200)
+                                filme.classificacao = resultClassificacao.items.classificacoes[0]
+                        }
+                    }
+
+                MESSAGES.DEFAULT_HEADER.status          = MESSAGES.SUCCESS_REQUEST.status
+                MESSAGES.DEFAULT_HEADER.status_code     = MESSAGES.SUCCESS_REQUEST.status_code
+                MESSAGES.DEFAULT_HEADER.items.filmes    = resultFilmes
 
                 return MESSAGES.DEFAULT_HEADER //200
             } else {
@@ -198,12 +206,21 @@ const inserirFilme = async (filme, contentType) => {
                         //Pesquisa no BD todos os generos que foram associados ao filme
                         let resultDadosGeneros = await controllerFilmeGenero.listarGenerosIdFilme(lastID)
 
-                        //Cria novamente o atributo genero e coloca o resultado do BD com os generos
-                        filme.genero = resultDadosGeneros.items.filmes_generos
+                        if (resultDadosGeneros.status_code == 200)
+                            //Cria novamente o atributo genero e coloca o resultado do BD com os generos
+                            filme.genero = resultDadosGeneros.items.filmes_generos
+
+                        //Pesquisa no BD a classificacao que foi associada ao filme
+                        if (filme.id_classificacao) {
+                            let resultDadosClassificacao = await controllerClassificacao.buscarClassificacaoId(filme.id_classificacao)
+                            if (resultDadosClassificacao.status_code == 200)
+                                filme.classificacao = resultDadosClassificacao.items.classificacoes[0]
+                        }
 
                         MESSAGES.DEFAULT_HEADER.items.filme = filme // Corrigido para adicionar o filme dentro de items
 
                         return MESSAGES.DEFAULT_HEADER //201
+
                     } else {
                         return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                     }

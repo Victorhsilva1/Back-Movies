@@ -104,7 +104,8 @@ const setInsertMovies = async function (filme) {
     duracao,
     orcamento,
     trailer,
-    capa
+    capa,
+    id_classificacao
 )
     VALUES (
         '${filme.nome}',
@@ -113,7 +114,8 @@ const setInsertMovies = async function (filme) {
         '${filme.duracao}',
         '${filme.orcamento}',
         '${filme.trailer}',
-        '${filme.capa}')`
+        '${filme.capa}',
+        ${filme.id_classificacao})`
 
         // quando ele devolve algo usa-se o query
         // agora quando nao tem o retorno de valor tem que ser o execute 
