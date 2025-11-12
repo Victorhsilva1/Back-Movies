@@ -84,21 +84,20 @@ const listarFilmes = async () => {
             //conto todos os itens que tem, se for maior que 0 >>>
             //resultFilmes com array com todos dentro dele
             if(resultFilmes.length > 0){
-                //devolve os itens e as mensagens de correto
-
-                //Processamento para adicionar os generos aos filmes 
-                for (filme of resultFilmes) {
-
-                    let resultGeneros = await controllerFilmeGenero.listarGenerosIdFilme(filme.id)
-
-
-                    if(resultGeneros.status_code == 200)
-                     filme.genero = resultGeneros.items.filmes_generos
-                }
+                
+                // Processamento para transformar a string de generos em um array
+                const filmesComGeneros = resultFilmes.map(filme => {
+                    const generos = filme.generos ? filme.generos.split(', ') : [];
+                    return {
+                        ...filme,
+                        classificacao: filme.nome_classificacao,
+                        generos: generos
+                    };
+                });
                 
                 MESSAGES.DEFAULT_HEADER.status          = MESSAGES.SUCESS_REQUEST.status
                 MESSAGES.DEFAULT_HEADER.status_code     = MESSAGES.SUCESS_REQUEST.status_code
-                MESSAGES.DEFAULT_HEADER.items.filmes    = resultFilmes
+                MESSAGES.DEFAULT_HEADER.items.filmes    = filmesComGeneros
 
                 return MESSAGES.DEFAULT_HEADER //200
             } else {
