@@ -16,7 +16,7 @@ const getSelectAllClassificacoes = async function () {
     try {
 
         //Script SQL
-        let sql = `select * from tbl_classificacao order by id desc`;
+        let sql = `select * from tbl_classificacao order by id_classificacao desc`;
 
         //Encaminha para o BD o Script SQL
         let result = await prisma.$queryRawUnsafe(sql);
@@ -34,7 +34,7 @@ const getSelectAllClassificacoes = async function () {
 const getSelectByIdClassificacao = async function (id) {
 
     try {
-        let sql = `select * from tbl_classificacao where id = ${id}`;
+        let sql = `select * from tbl_classificacao where id_classificacao = ${id}`;
         let result = await prisma.$queryRawUnsafe(sql);
         if (Array.isArray(result)) {
             return result;
@@ -50,16 +50,10 @@ const getSelectByIdClassificacao = async function (id) {
 const setInsertClassificacao = async function (classificacao) {
     try {
         let sql = `INSERT INTO tbl_classificacao (
-        faixa_etaria,
-        classificacao,
-        caracteristicas,
-        icone
+        nome_classificacao
     )
     VALUES (
-        '${classificacao.faixa_etaria}',
-        '${classificacao.classificacao}',
-        '${classificacao.caracteristicas}',
-        '${classificacao.icone}'
+        '${classificacao.nome_classificacao}',
         )`
 
         let result = await prisma.$executeRawUnsafe(sql)
@@ -76,11 +70,8 @@ const setInsertClassificacao = async function (classificacao) {
 const setUpdateClassificacao = async function (classificacao) {
     try {
         let sql = `UPDATE tbl_classificacao SET
-            faixa_etaria = '${classificacao.faixa_etaria}',
-            classificacao = '${classificacao.classificacao}',
-            caracteristicas = '${classificacao.caracteristicas}',
-            icone = '${classificacao.icone}'
-        WHERE id = ${classificacao.id}`
+            nome_classificacao = '${classificacao.nome_classificacao}',
+        WHERE id_classificacao = ${classificacao.id_classificacao}`
 
         let result = await prisma.$executeRawUnsafe(sql)
         if (result)
@@ -94,7 +85,7 @@ const setUpdateClassificacao = async function (classificacao) {
 
 const setDeleteClassificacao = async function (id) {
     try {
-        let sql = `DELETE FROM tbl_classificacao WHERE id = ${id}`
+        let sql = `DELETE FROM tbl_classificacao WHERE id_classificacao = ${id}`
         let result = await prisma.$executeRawUnsafe(sql)
         if (result)
             return true
@@ -107,7 +98,7 @@ const setDeleteClassificacao = async function (id) {
 
 const getSelectLastId = async function () {
     try {
-        let sql = `select id from tbl_classificacao order by id desc limit 1`
+        let sql = `select id_classificacao from tbl_classificacao order by id_classificacao desc limit 1`
         let result = await prisma.$queryRawUnsafe(sql)
 
         if (Array.isArray(result))
