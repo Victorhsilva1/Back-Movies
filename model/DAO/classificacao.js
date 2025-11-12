@@ -53,7 +53,7 @@ const setInsertClassificacao = async function (classificacao) {
         nome_classificacao
     )
     VALUES (
-        '${classificacao.nome_classificacao}',
+        '${classificacao.nome_classificacao}'
         )`
 
         let result = await prisma.$executeRawUnsafe(sql)
@@ -70,7 +70,7 @@ const setInsertClassificacao = async function (classificacao) {
 const setUpdateClassificacao = async function (classificacao) {
     try {
         let sql = `UPDATE tbl_classificacao SET
-            nome_classificacao = '${classificacao.nome_classificacao}',
+            nome_classificacao = '${classificacao.nome_classificacao}'
         WHERE id_classificacao = ${classificacao.id_classificacao}`
 
         let result = await prisma.$executeRawUnsafe(sql)
@@ -102,7 +102,7 @@ const getSelectLastId = async function () {
         let result = await prisma.$queryRawUnsafe(sql)
 
         if (Array.isArray(result))
-            return Number(result[0].id)
+            return Number(result[0].id_classificacao)
         else
             return false
 
